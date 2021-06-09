@@ -21,7 +21,7 @@ app.use(express.static('public'));
 
 app.get('*', function (req, res) {
     // The 404 Route (ALWAYS Keep this as the last route)
-    res.redirect('https://cryptochat.dev');
+    res.redirect(config.webserver.splash);
 });
 
 

@@ -1,0 +1,10 @@
+// Definitions 
+
+var webserver = {};
+
+webserver.port = 6969;
+webserver.host = 'localhost';
+webserver.splash = 'https://cryptochat.dev'
+
+// Module Exports
+module.exports.webserver = webserver;
