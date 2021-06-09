@@ -29,14 +29,13 @@ app.get('*', function (req, res) {
 
 io.on('connection', (socket) => {
     socket.on('chat event', (data) => {
-        console.log(data)
         try {
             JSON.parse(x);
         } catch (e) {
             json = false
         }
         if (typeof data === 'object' || json == true) {
-            if (data.roomName === undefined || data.user_name === undefined || data.message === undefined) {
+            if (data.roomName === null || data.user_name === undefined || data.message === undefined) {
                 return;
             }
             io.to(data.roomName).emit('my response', {user_name: data.user_name, message: data.message});
@@ -47,12 +46,7 @@ io.on('connection', (socket) => {
 
     socket.on('join', (room) => {
         socket.join(room);
-        console.log(`Socket ${socket.id} joining ${room}.`)
     });
-
-    socket.on('disconnect', () => {
-        console.log(`Disconnected: ${socket.id}.`)
-    })
 });
 
 
