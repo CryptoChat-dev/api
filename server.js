@@ -27,8 +27,8 @@ app.get('*', function (req, res) {
 
 // SocketIO
 
-io.on('connection', (connection) => {
-    connection.on('chat event', (data) => {
+io.on('connection', (socket) => {
+    socket.on('chat event', (data) => {
         try {
             JSON.parse(x);
         } catch (e) {
@@ -40,7 +40,17 @@ io.on('connection', (connection) => {
         }
         console.log("Event was rejected." + data)
     });
+
+    socket.on('join', (room) => {
+        socket.join(room);
+        console.log(`Socket ${socket.id} joining ${room}.`)
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`Disconnected: ${socket.id}.`)
+    })
 });
+
 
 // Server start
 
