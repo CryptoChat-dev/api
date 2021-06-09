@@ -29,6 +29,7 @@ app.get('*', function (req, res) {
 
 io.on('connection', (socket) => {
     socket.on('chat event', (data) => {
+        console.log(data)
         try {
             JSON.parse(x);
         } catch (e) {
