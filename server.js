@@ -35,8 +35,11 @@ io.on('connection', (socket) => {
             json = false
         }
         if (typeof data === 'object' || json == true) {
-            io.emit('my response', data);
-            return
+            if (data.roomName === undefined || data.user_name === undefined || data.message === undefined) {
+                return;
+            }
+            io.to(data.roomName).emit('my response', {user_name: data.user_name, message: data.message});
+            return;
         }
         console.log("Event was rejected." + data)
     });
