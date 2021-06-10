@@ -49,20 +49,22 @@ io.on('connection', (socket) => {
     });
 
     socket.on('file event', (data) => {
-        try {
-            JSON.parse(x);
-        } catch (e) {
-            json = false
-        }
-        if (typeof data === 'object' || json == true) {
-            if (data.roomName === null || data.user_name === undefined || data.data === undefined) {
+        if (config.api.fileUpload === true) {
+            try {
+                JSON.parse(x);
+            } catch (e) {
+                json = false
+            }
+            if (typeof data === 'object' || json == true) {
+                if (data.roomName === null || data.user_name === undefined || data.name === undefined || data.data === undefined) {
+                    return;
+                }
+                io.to(data.roomName).emit('file response', {user_name: data.user_name, name: data.name, data: data.data});
                 return;
             }
-            io.to(data.roomName).emit('file response', {user_name: data.user_name, data: data.data});
-            return;
+            var now = new Date();
+            console.log(`${now} - Event was rejected.`)
         }
-        var now = new Date();
-        console.log(`${now} - Event was rejected.`)
     })
 });
 
