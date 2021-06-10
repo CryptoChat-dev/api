@@ -38,15 +38,32 @@ io.on('connection', (socket) => {
             if (data.roomName === null || data.user_name === undefined || data.message === undefined) {
                 return;
             }
-            io.to(data.roomName).emit('my response', {user_name: data.user_name, message: data.message});
+            io.to(data.roomName).emit('chat response', {user_name: data.user_name, message: data.message});
             return;
         }
-        console.log("Event was rejected." + data)
+        console.log(`${now} - Event was rejected: ${data}`)
     });
 
     socket.on('join', (room) => {
         socket.join(room);
     });
+
+    socket.on('file event', (data) => {
+        try {
+            JSON.parse(x);
+        } catch (e) {
+            json = false
+        }
+        if (typeof data === 'object' || json == true) {
+            if (data.roomName === null || data.user_name === undefined || data.data === undefined) {
+                return;
+            }
+            io.to(data.roomName).emit('file response', {user_name: data.user_name, data: data.data});
+            return;
+        }
+        var now = new Date();
+        console.log(`${now} - Event was rejected.`)
+    })
 });
 
 

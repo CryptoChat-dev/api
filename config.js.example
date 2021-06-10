@@ -1,10 +1,14 @@
 // Definitions 
 
 var webserver = {};
+var api = {};
 
 webserver.port = 6969;
 webserver.host = 'localhost';
 webserver.splash = 'https://cryptochat.dev'
 
+api.fileUpload = true;
+
 // Module Exports
 module.exports.webserver = webserver;
+module.exports.api = api;
