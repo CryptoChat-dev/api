@@ -59,11 +59,11 @@ io.on('connection', (socket) => {
             }
             if (typeof data === 'object' || json == true) {
                 var now = new Date();
-                if (data.roomName === null || data.user_name === undefined || data.name === undefined || data.data === undefined) {
+                if (data.roomName === null || data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined) {
                     console.log(`${now} - Event had invalid fields.`)
                     return;
                 }
-                io.to(data.roomName).emit('file response', {user_name: data.user_name, name: data.name, data: data.data});
+                io.to(data.roomName).emit('file response', {user_name: data.user_name, name: data.name, type: data.type, data: data.data});
                 return;
             }
             console.log(`${now} - Event was rejected.`)
