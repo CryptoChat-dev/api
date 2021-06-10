@@ -35,7 +35,9 @@ io.on('connection', (socket) => {
             json = false
         }
         if (typeof data === 'object' || json == true) {
+            var now = new Date();
             if (data.roomName === null || data.user_name === undefined || data.message === undefined) {
+                console.log(`${now} - Event had invalid fields.`)
                 return;
             }
             io.to(data.roomName).emit('chat response', {user_name: data.user_name, message: data.message});
@@ -56,13 +58,14 @@ io.on('connection', (socket) => {
                 json = false
             }
             if (typeof data === 'object' || json == true) {
+                var now = new Date();
                 if (data.roomName === null || data.user_name === undefined || data.name === undefined || data.data === undefined) {
+                    console.log(`${now} - Event had invalid fields.`)
                     return;
                 }
                 io.to(data.roomName).emit('file response', {user_name: data.user_name, name: data.name, data: data.data});
                 return;
             }
-            var now = new Date();
             console.log(`${now} - Event was rejected.`)
         }
     })
