@@ -3,7 +3,9 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+    maxHttpBufferSize: 6e6
+});
 const compression = require('compression');
 const minify = require('express-minify');
 
