@@ -52,7 +52,7 @@ io.on('connection', (socket) => {
         socket.join(room);
     });
 
-    socket.on('leave', (room) => {
+    socket.on('leave', (data) => {
         socket.disconnect();
         try {
             JSON.parse(x);
