@@ -99,7 +99,7 @@ io.on('connection', (socket) => {
             }
             if (typeof data === 'object' || json == true) {
                 var now = new Date();
-                if (data.roomName === null || data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined) {
+                if (data.roomName === undefined || data.uid === undefined || data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined) {
                     console.log(`${now} - Event had invalid fields.`)
                     return;
                 }
@@ -107,7 +107,8 @@ io.on('connection', (socket) => {
                     user_name: data.user_name,
                     name: data.name,
                     type: data.type,
-                    data: data.data
+                    data: data.data,
+                    uid: data.uid
                 });
                 return;
             }
