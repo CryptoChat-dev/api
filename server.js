@@ -48,8 +48,25 @@ io.on('connection', (socket) => {
         console.log(`${now} - Event was rejected: ${data}`)
     });
 
-    socket.on('join', (room) => {
-        socket.join(room);
+    socket.on('join', (data) => {
+        try {
+            JSON.parse(x);
+        } catch (e) {
+            json = false
+        }
+        if (typeof data === 'object' || json == true) {
+            var now = new Date();
+            if (data.roomName === null || data.user_name === undefined) {
+                console.log(`${now} - Event had invalid fields.`)
+                return;
+            }
+            socket.join(data.roomName);
+            io.to(data.roomName).emit('join response', {
+                user_name: data.user_name
+            });
+            return;
+        }
+        console.log(`${now} - Event was rejected: ${data}`)
     });
 
     socket.on('leave', (data) => {
