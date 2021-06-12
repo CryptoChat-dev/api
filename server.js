@@ -89,16 +89,16 @@ io.on('connection', (socket) => {
             io.to(data.roomName).emit('leave response', {
                 user_name: data.user_name
             });
-            const userCount = rooms[room];
+            const userCount = rooms[data.roomName];
 
             if (userCount === undefined) {
                 return;
             } else if (userCount === 1) {
-                rooms[room] = 0;
+                rooms[data.roomName] = 0;
                 return;
             } else {
-                rooms[room] = userCount - 1;
-                io.to(room).emit('user count', {
+                rooms[data.roomName] = userCount - 1;
+                io.to(data.roomName).emit('user count', {
                     count: userCount - 1
                 });
             }
