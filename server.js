@@ -88,25 +88,28 @@ io.on('connection', (socket) => {
             io.to(data.roomName).emit('leave response', {
                 user_name: data.user_name
             });
-
-            const userCount = rooms[data.roomName];
-
-            if (userCount === undefined) {
-                return;
-            } else if (userCount === 1) {
-                rooms[data.roomName] = 0;
-                return;
-            } else {
-                rooms[data.roomName] = userCount - 1;
-                io.to(data.roomName).emit('user count', {
-                    count: userCount - 1
-                });
-            }
-
             return;
         }
         console.log(`${now} - Event was rejected: ${data}`)
     });
+
+    socket.on('disconnect', () => {
+        for (room of socket.rooms) {
+            const userCount = rooms[room];
+
+            if (userCount === undefined) {
+                return;
+            } else if (userCount === 1) {
+                rooms[room] = 0;
+                return;
+            } else {
+                rooms[room] = userCount - 1;
+                io.to(room).emit('user count', {
+                    count: userCount - 1
+                });
+            }
+        }
+    })
 
     ss(socket).on('file event', function(stream, data) {
         var now = new Date();
