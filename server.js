@@ -27,6 +27,8 @@ const io = require('socket.io')(server, {maxHttpBufferSize: config.api.maxSize})
 
 // SocketIO
 
+const rooms = {}
+
 io.on('connection', (socket) => {
     socket.on('chat event', (data) => {
         if (typeof data === 'object') {
@@ -55,6 +57,21 @@ io.on('connection', (socket) => {
             io.to(data.roomName).emit('join response', {
                 user_name: data.user_name
             });
+
+            const userCount = rooms[data.roomName];
+
+            if (userCount === undefined) {
+                rooms[data.roomName] = 1;
+                io.to(data.roomName).emit('user count', {
+                    count: 1
+                });
+            } else {
+                rooms[data.roomName] = userCount + 1;
+                io.to(data.roomName).emit('user count', {
+                    count: userCount + 1
+                });
+            }
+
             return;
         }
         console.log(`${now} - Event was rejected: ${data}`)
@@ -71,6 +88,21 @@ io.on('connection', (socket) => {
             io.to(data.roomName).emit('leave response', {
                 user_name: data.user_name
             });
+
+            const userCount = rooms[data.roomName];
+
+            if (userCount === undefined) {
+                return;
+            } else if (userCount === 1) {
+                rooms[data.roomName] = 0;
+                return;
+            } else {
+                rooms[data.roomName] = userCount - 1;
+                io.to(data.roomName).emit('user count', {
+                    count: userCount - 1
+                });
+            }
+
             return;
         }
         console.log(`${now} - Event was rejected: ${data}`)
