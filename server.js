@@ -120,6 +120,10 @@ io.on('connection', (socket) => {
     ss(socket).on('file event', function(stream, data) {
         var now = new Date();
         console.log(`${now} - File event received: ${data.name}`)
+        io.to(socket.id).emit('file progress', {
+            finished: true
+        });
+        
         io.to(data.roomName).emit('file response', {
             user_name: data.user_name,
             name: data.name,
