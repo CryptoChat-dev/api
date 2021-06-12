@@ -85,6 +85,7 @@ io.on('connection', (socket) => {
                 console.log(`${now} - Event had invalid fields.`)
                 return;
             }
+            socket.leave(data.roomName)
             io.to(data.roomName).emit('leave response', {
                 user_name: data.user_name
             });
@@ -93,7 +94,7 @@ io.on('connection', (socket) => {
         console.log(`${now} - Event was rejected: ${data}`)
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnection', () => {
         console.log(socket.rooms)
         for (room of socket.rooms) {
             const userCount = rooms[room];
