@@ -6,6 +6,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server, {maxHttpBufferSize: 6e6});
 const compression = require('compression');
 const minify = require('express-minify');
+var ss = require('socket.io-stream');
 
 // File imports
 
@@ -90,31 +91,42 @@ io.on('connection', (socket) => {
         console.log(`${now} - Event was rejected: ${data}`)
     });
 
-    socket.on('file event', (data) => {
-        if (config.api.fileUpload === true) {
-            try {
-                JSON.parse(x);
-            } catch (e) {
-                json = false
-            }
-            if (typeof data === 'object' || json == true) {
-                var now = new Date();
-                if (data.roomName === undefined || data.uid === undefined || data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined) {
-                    console.log(`${now} - Event had invalid fields.`)
-                    return;
-                }
-                io.to(data.roomName).emit('file response', {
-                    user_name: data.user_name,
-                    name: data.name,
-                    type: data.type,
-                    data: data.data,
-                    uid: data.uid
-                });
-                return;
-            }
-            console.log(`${now} - Event was rejected.`)
-        }
-    })
+    // socket.on('file event', (data) => {
+    //     if (config.api.fileUpload === true) {
+    //         try {
+    //             JSON.parse(x);
+    //         } catch (e) {
+    //             json = false
+    //         }
+    //         if (typeof data === 'object' || json == true) {
+    //             var now = new Date();
+    //             if (data.roomName === undefined || data.uid === undefined || data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined) {
+    //                 console.log(`${now} - Event had invalid fields.`)
+    //                 return;
+    //             }
+    //             io.to(data.roomName).emit('file response', {
+    //                 user_name: data.user_name,
+    //                 name: data.name,
+    //                 type: data.type,
+    //                 data: data.data,
+    //                 uid: data.uid
+    //             });
+    //             return;
+    //         }
+    //         console.log(`${now} - Event was rejected.`)
+    //     }
+    // })
+
+    ss(socket).on('file event', function(stream, data) {
+        io.to(data.roomName).emit('file response', {
+            user_name: data.user_name,
+            name: data.name,
+            type: data.type,
+            data: data.data,
+            uid: data.uid
+        });
+    });
+    
 });
 
 
