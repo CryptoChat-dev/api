@@ -8,6 +8,7 @@ webserver.host = 'localhost';
 webserver.splash = 'https://cryptochat.dev'
 
 api.fileUpload = true;
+api.maxSize = 15e6;
 
 // Module Exports
 module.exports.webserver = webserver;
