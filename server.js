@@ -94,6 +94,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
+        console.log(socket.rooms)
         for (room of socket.rooms) {
             const userCount = rooms[room];
 
