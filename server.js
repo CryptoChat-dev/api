@@ -89,14 +89,6 @@ io.on('connection', (socket) => {
             io.to(data.roomName).emit('leave response', {
                 user_name: data.user_name
             });
-            return;
-        }
-        console.log(`${now} - Event was rejected: ${data}`)
-    });
-
-    socket.on('disconnection', () => {
-        console.log(socket.rooms)
-        for (room of socket.rooms) {
             const userCount = rooms[room];
 
             if (userCount === undefined) {
@@ -110,8 +102,11 @@ io.on('connection', (socket) => {
                     count: userCount - 1
                 });
             }
+
+            return;
         }
-    })
+        console.log(`${now} - Event was rejected: ${data}`)
+    });
 
     ss(socket).on('file event', function(stream, data) {
         var now = new Date();
