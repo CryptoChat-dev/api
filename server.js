@@ -29,14 +29,9 @@ const io = require('socket.io')(server, {maxHttpBufferSize: config.api.maxSize})
 
 io.on('connection', (socket) => {
     socket.on('chat event', (data) => {
-        try {
-            JSON.parse(x);
-        } catch (e) {
-            json = false
-        }
-        if (typeof data === 'object' || json == true) {
+        if (typeof data === 'object') {
             var now = new Date();
-            if (data.roomName === null || data.user_name === undefined || data.message === undefined) {
+            if (data.roomName === undefined || data.user_name === undefined || data.message === undefined) {
                 console.log(`${now} - Event had invalid fields.`)
                 return;
             }
@@ -50,14 +45,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('join', (data) => {
-        try {
-            JSON.parse(x);
-        } catch (e) {
-            json = false
-        }
-        if (typeof data === 'object' || json == true) {
+        if (typeof data === 'object') {
             var now = new Date();
-            if (data.roomName === null || data.user_name === undefined) {
+            if (data.roomName === undefined || data.user_name === undefined) {
                 console.log(`${now} - Event had invalid fields.`)
                 return;
             }
