@@ -139,17 +139,18 @@ io.on('connection', (socket) => {
         var now = new Date();
 
         console.log(`${now} - File event received`)
-        
-        try {
-            io.to(data.roomName).emit('file response', {
-                user_name: data.user_name,
-                name: data.name,
-                type: data.type,
-                data: data.data
-            });
-        } catch(err) {
+        if (data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined || data.hmac === undefined) {
             console.log(`${now} - Event had invalid fields.`);
+            return;
         }
+        
+        io.to(data.roomName).emit('file response', {
+            user_name: data.user_name,
+            name: data.name,
+            type: data.type,
+            data: data.data,
+            hmac: data.hmac
+        });
         
         io.to(socket.id).emit('file progress', {
             finished: true
