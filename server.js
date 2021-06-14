@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
         if (typeof data === 'object') {
             // Make sure the data received is a JS object
             var now = new Date();
-            if (data.roomName === undefined || data.user_name === undefined || data.message === undefined) {
+            if (data.roomName === undefined || data.user_name === undefined || data.message === undefined || data.hmac === undefined) {
                 // Check if the fields are present
                 console.log(`${now} - Event had invalid fields.`)
                 return;
@@ -44,7 +44,8 @@ io.on('connection', (socket) => {
             io.to(data.roomName).emit('chat response', {
                 // Broadcasts the message to the Socket room
                 user_name: data.user_name,
-                message: data.message
+                message: data.message,
+                hmac: data.hmac
             });
             return;
         }
@@ -138,17 +139,18 @@ io.on('connection', (socket) => {
         var now = new Date();
 
         console.log(`${now} - File event received`)
-        
-        try {
-            io.to(data.roomName).emit('file response', {
-                user_name: data.user_name,
-                name: data.name,
-                type: data.type,
-                data: data.data
-            });
-        } catch(err) {
+        if (data.user_name === undefined || data.name === undefined || data.type === undefined || data.data === undefined || data.hmac === undefined) {
             console.log(`${now} - Event had invalid fields.`);
+            return;
         }
+        
+        io.to(data.roomName).emit('file response', {
+            user_name: data.user_name,
+            name: data.name,
+            type: data.type,
+            data: data.data,
+            hmac: data.hmac
+        });
         
         io.to(socket.id).emit('file progress', {
             finished: true
